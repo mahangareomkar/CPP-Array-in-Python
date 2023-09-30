@@ -1,26 +1,25 @@
-import ctypes
+from build.array import Array
 
-MyArray = ctypes.cdll.LoadLibrary('./array.dll')
+print(dir(Array))
 
-#Definitions
+arr = Array(5)
+print(arr)
 
-MyArray.createArraywithSize.argtypes = [ctypes.c_int]
-#MyArray.swap = [ctypes.pointer(arr1),ctypes.c_int,ctypes.c_int]
+print("\n\n\nBefore Insertion")
+arr.display()
+arr.insert(1, 2)
+arr.insert(0, 5)
+arr.insert(2, 10)
+arr.insert(3, 1)
+arr.insert(4, 3)
 
-arr1 = MyArray.createArray()
+print("\n\n\nAfter Insertion")
+arr.display()
 
-MyArray.display(arr1)
+print("\n\n\nSorting")
+arr.bubbleSort()
+arr.display()
 
-arr2 = MyArray.createArraywithSize(15)
-
-MyArray.display(arr2)
-
-MyArray.swap(arr1,ctypes.c_int(5),ctypes.c_int(5))
-
-MyArray.swap(arr1,5,5)
-
-MyArray.display(arr1)
-
-MyArray.release(arr1)
-
-print(arr1)
+print("\n\n\nSearching")
+arr.binarySearch(5)
+arr.binarySearch(18)
