@@ -8,12 +8,12 @@ using namespace std;
 class Array
 {
     int size;
+    int last=0;
     int *arr;
 
 public:
     Array()
     {
-        cout << "Array default constructor" << endl;
         size = 10;
         arr = new int[size];
         for (int i = 0; i < size; i++)
@@ -24,7 +24,6 @@ public:
 
     Array(int s)
     {
-        cout << "Array Parameterized constructor" << endl;
         size = s;
         arr = new int[size];
         for (int i = 0; i < size; i++)
@@ -33,15 +32,19 @@ public:
         }
     }
 
-    void insert(int index, int num)
-    {
-        arr[index] = num;
-    }
-
     void display()
     {
-        for (int i = 0; i < size; i++)
-            cout << i + 1 << "] " << arr[i] << endl;
+        cout<<"[";
+        for (int i=0;i<last; i++){
+            if(i==last-1){
+                cout<<arr[i]<<"]"<<endl;
+            }else{
+                cout <<arr[i]<<",";;
+            }
+        }
+        if(last==0){
+            cout<<"]"<<endl;
+        }
     }
 
     void bubbleSort()
@@ -60,19 +63,17 @@ public:
         }
     }
 
-    void binarySearch(int num)
+    int binarySearch(int num)
     {
         int l = 0, r = size - 1;
         int mid;
-        bool found = false;
         while (l <= r)
         {
             mid = (l + r) / 2;
 
             if (num == arr[mid])
             {
-                cout << num << " is at Index " << mid << endl;
-                found = true;
+                return mid;
                 break;
             }
             else if (num < arr[mid])
@@ -85,10 +86,32 @@ public:
             }
         }
 
-        if (!found)
-        {
-            cout << num << " is not in the Array" << endl;
+        return -1;
+    }
+
+    void increaseSize(){
+        int* newArr = new int[size*2];
+
+        for(int i=0;i<size;i++){
+            newArr[i] = arr[i];
         }
+
+        for(int i=size;i<size*2;i++){
+            newArr[i] = INT_MAX;
+        }
+
+        arr = newArr;
+        size *= 2;
+    }
+
+
+    void push(int num){
+        if(last==size){
+            this->increaseSize();
+        }
+
+        arr[last] = num;
+        last++;
     }
 };
 
@@ -97,8 +120,8 @@ PYBIND11_MODULE(array, m)
     py::class_<Array>(m, "Array")
         .def(py::init<>())
         .def(py::init<int>())
-        .def("insert", &Array::insert)
         .def("display", &Array::display)
         .def("binarySearch", &Array::binarySearch)
-        .def("bubbleSort", &Array::bubbleSort);
+        .def("bubbleSort", &Array::bubbleSort)
+        .def("push", &Array::push);
 }
